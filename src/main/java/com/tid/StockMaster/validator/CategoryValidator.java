@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CategoryValidator {
 
-    public static List<String> CategoryValidator(CategoryDto categoryDto) {
+    public static List<String> categoryValidator(CategoryDto categoryDto) {
         List<String> errors = new ArrayList<String>();
         if(categoryDto == null || !StringUtils.hasLength(categoryDto.getCode())){
             errors.add("Veuillez renseigner le code de la categorie");
