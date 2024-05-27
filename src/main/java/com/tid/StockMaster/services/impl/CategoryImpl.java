@@ -53,6 +53,18 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
+    public CategoryDto findByCode(String code) {
+        if(code == null ){
+            log.error("Category code is null");
+            return null;
+        }
+        return categoryRepository.findCategoryByCode(code)
+                .map(CategoryDto::fromEntity).orElseThrow(() -> new EntityNotFoundException(
+                        "Aucune category avec le CODE = " + code + " n' ete trouve dans la BDD",
+                        ErrorCodes.CATEGORY_NOT_FOUND));
+    }
+
+    @Override
     public void delete(Integer id) {
         if(id == null ){
             log.error("Category id is null");

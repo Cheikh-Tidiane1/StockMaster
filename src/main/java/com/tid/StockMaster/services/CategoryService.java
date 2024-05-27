@@ -8,6 +8,7 @@ public interface CategoryService {
     CategoryDto save(CategoryDto categoryDto);
     Iterable<CategoryDto> findAll();
     CategoryDto findById(Integer id);
+    CategoryDto findByCode(String code);
     void delete(Integer id);
 
 }
