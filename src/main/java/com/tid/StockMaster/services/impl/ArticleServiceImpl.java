@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
     @Autowired
     public ArticleServiceImpl(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
@@ -63,7 +63,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleDto> findAll() {
+    public Iterable<ArticleDto> findAll() {
         return articleRepository.findAll().stream()
                 .map(ArticleDto::fromEntity)
                 .collect(Collectors.toList());
