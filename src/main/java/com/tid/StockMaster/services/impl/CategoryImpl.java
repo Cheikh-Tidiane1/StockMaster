@@ -9,6 +9,7 @@ import com.tid.StockMaster.services.CategoryService;
 import com.tid.StockMaster.validator.CategoryValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,7 +55,7 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public CategoryDto findByCode(String code) {
-        if(code == null ){
+        if(!StringUtils.hasLength(code)){
             log.error("Category code is null");
             return null;
         }

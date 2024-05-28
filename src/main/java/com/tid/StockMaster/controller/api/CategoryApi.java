@@ -17,9 +17,9 @@ public interface CategoryApi {
     CategoryDto findById(@PathVariable("categoryId") Integer id);
 
     @DeleteMapping(path = APP_ROOT + "/categories/delete/{categoryId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    void delete(@PathVariable("categoryId")Integer id);
-    
+    void delete(@PathVariable("categoryId") Integer id);
+
     @GetMapping(path = APP_ROOT + "/categories/{codeCategory}", produces = MediaType.APPLICATION_JSON_VALUE)
-    CategoryDto findByCode(@PathVariable("codeCategory")String code);
+    CategoryDto findByCode(@PathVariable("codeCategory") String code);
 
 }
