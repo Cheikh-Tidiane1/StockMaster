@@ -3,6 +3,7 @@ import com.tid.StockMaster.controller.api.CommandeClientApi;
 import com.tid.StockMaster.dto.CommandeClientDto;
 import com.tid.StockMaster.services.CommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,27 +17,28 @@ public class CommandeClientController implements CommandeClientApi {
     }
 
     @Override
-    public CommandeClientDto save(CommandeClientDto dto) {
-        return commandeClientService.save(dto);
+    public ResponseEntity<CommandeClientDto> save(CommandeClientDto dto) {
+        return ResponseEntity.ok(commandeClientService.save(dto));
     }
 
     @Override
-    public CommandeClientDto findById(Integer idCommandeClient) {
-        return commandeClientService.findById(idCommandeClient);
+    public ResponseEntity<CommandeClientDto> findById(Integer idCommandeClient) {
+        return  ResponseEntity.ok(commandeClientService.findById(idCommandeClient));
     }
 
     @Override
-    public CommandeClientDto findByCode(String code) {
-        return commandeClientService.findByCode(code);
+    public ResponseEntity<CommandeClientDto> findByCode(String code) {
+        return ResponseEntity.ok(commandeClientService.findByCode(code));
     }
 
     @Override
-    public Iterable<CommandeClientDto> findAll() {
-        return commandeClientService.findAll();
+    public ResponseEntity<Iterable<CommandeClientDto>> findAll() {
+        return ResponseEntity.ok(commandeClientService.findAll());
     }
 
     @Override
-    public void delete(Integer id) {
+    public ResponseEntity delete(Integer id) {
         commandeClientService.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

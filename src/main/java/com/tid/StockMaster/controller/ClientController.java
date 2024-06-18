@@ -3,6 +3,7 @@ import com.tid.StockMaster.controller.api.ClientApi;
 import com.tid.StockMaster.dto.ClientDto;
 import com.tid.StockMaster.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,22 +17,23 @@ public class ClientController implements ClientApi {
   }
 
   @Override
-  public ClientDto save(ClientDto dto) {
-    return clientService.save(dto);
+  public ResponseEntity<ClientDto> save(ClientDto dto) {
+    return ResponseEntity.ok(clientService.save(dto));
   }
 
   @Override
-  public ClientDto findById(Integer id) {
-    return clientService.findById(id);
+  public ResponseEntity<ClientDto> findById(Integer id) {
+    return ResponseEntity.ok(clientService.findById(id));
   }
 
   @Override
-  public Iterable<ClientDto> findAll() {
-    return clientService.findAll();
+  public ResponseEntity<Iterable<ClientDto>> findAll() {
+    return ResponseEntity.ok(clientService.findAll());
   }
 
   @Override
-  public void delete(Integer id) {
+  public ResponseEntity delete(Integer id) {
     clientService.delete(id);
+    return ResponseEntity.ok().build();
   }
 }

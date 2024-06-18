@@ -3,6 +3,7 @@ package com.tid.StockMaster.controller;
 import com.tid.StockMaster.controller.api.CategoryApi;
 import com.tid.StockMaster.dto.CategoryDto;
 import com.tid.StockMaster.services.CategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,27 +14,28 @@ public class CategoryController implements CategoryApi {
         this.categoryService = categoryService;
     }
     @Override
-    public CategoryDto save(CategoryDto categoryDto) {
-        return categoryService.save(categoryDto);
+    public ResponseEntity<CategoryDto> save(CategoryDto categoryDto) {
+        return ResponseEntity.ok(categoryService.save(categoryDto));
     }
 
     @Override
-    public Iterable<CategoryDto> findAll() {
-        return categoryService.findAll();
+    public ResponseEntity<Iterable<CategoryDto>> findAll() {
+        return ResponseEntity.ok(categoryService.findAll());
     }
 
     @Override
-    public CategoryDto findById(Integer id) {
-        return categoryService.findById(id);
+    public ResponseEntity<CategoryDto> findById(Integer id) {
+        return ResponseEntity.ok(categoryService.findById(id));
     }
 
     @Override
-    public void delete(Integer id) {
+    public ResponseEntity delete(Integer id) {
         categoryService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
     @Override
-    public CategoryDto findByCode(String code) {
-        return categoryService.findByCode(code);
+    public ResponseEntity<CategoryDto> findByCode(String code) {
+        return ResponseEntity.ok(categoryService.findByCode(code));
     }
 }
