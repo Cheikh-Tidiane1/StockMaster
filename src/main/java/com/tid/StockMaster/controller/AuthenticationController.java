@@ -17,20 +17,20 @@ import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 //@RequestMapping(APP_ROOT + "/auth")
 public class AuthenticationController {
 
-//    @Autowired
-//    private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Autowired
     private ApplicationUserDetailsService userDetailsService;
 
     @PostMapping(path = "authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getLogin(),
-//                        request.getPassword()
-//                )
-//        );
-//        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getLogin(),
+                        request.getPassword()
+                )
+        );
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
         return ResponseEntity.ok(AuthenticationResponse.builder().accessToken("Lm_access_token").build());
     };
 }
