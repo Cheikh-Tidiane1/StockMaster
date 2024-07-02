@@ -4,6 +4,7 @@ import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.model.Utilisateur;
 import com.tid.StockMaster.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,8 +15,11 @@ import java.util.Collections;
 @Service
 public class ApplicationUserDetailsService implements UserDetailsService {
 
+    private final UtilisateurRepository utilisateurRepository;
     @Autowired
-    private UtilisateurRepository utilisateurRepository;
+    public ApplicationUserDetailsService(UtilisateurRepository utilisateurRepository) {
+        this.utilisateurRepository = utilisateurRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
