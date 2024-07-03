@@ -9,9 +9,12 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import java.util.Arrays;
 
 @Configuration
@@ -19,21 +22,36 @@ import java.util.Arrays;
 public class SecurityConfiguration  {
 
     private ApplicationUserDetailsService userDetailsService;
+    private ApplicationRequestFilter requestFilter;
     @Autowired
-    public SecurityConfiguration(ApplicationUserDetailsService userDetailsService) {
+    public SecurityConfiguration(ApplicationUserDetailsService userDetailsService, ApplicationRequestFilter requestFilter) {
         this.userDetailsService = userDetailsService;
+        this.requestFilter = requestFilter;
     }
 
     @Bean
     public SecurityFilterChain security(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("authenticate")
+                        .requestMatchers("authenticate","/**/entreprises/create",
+                                "/v3/api-docs",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-ui.html",
+                                "/webjars/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
-                .build();
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
+                return http.build();
     }
 
     @Bean
