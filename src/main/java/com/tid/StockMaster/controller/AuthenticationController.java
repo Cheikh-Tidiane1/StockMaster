@@ -1,6 +1,7 @@
 package com.tid.StockMaster.controller;
 import com.tid.StockMaster.dto.auth.AuthenticationRequest;
 import com.tid.StockMaster.dto.auth.AuthenticationResponse;
+import com.tid.StockMaster.model.auth.ExtendedUser;
 import com.tid.StockMaster.services.auth.ApplicationUserDetailsService;
 import com.tid.StockMaster.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +27,15 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
     @PostMapping(path = "authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getLogin(),
-//                        request.getPassword()
-//                )
-//        );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getLogin(),
+                        request.getPassword()
+                )
+        );
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
-        final String jwt = jwtUtil.generateToken(userDetails);
+        final String jwt = jwtUtil.generateToken((ExtendedUser)userDetails);
         return ResponseEntity.ok(AuthenticationResponse.builder().accessToken(jwt).build());
     };
 }
