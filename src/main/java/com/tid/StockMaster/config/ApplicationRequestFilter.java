@@ -1,5 +1,5 @@
 package com.tid.StockMaster.config;
-
+import org.slf4j.MDC;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import com.tid.StockMaster.services.auth.ApplicationUserDetailsService;
 import com.tid.StockMaster.utils.JwtUtil;
@@ -31,11 +31,12 @@ public class ApplicationRequestFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         String userEmail = null;
         String jwt = null;
-
+        String idEntreprise = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             userEmail = jwtUtil.extractUsername(jwt);
+            idEntreprise = jwtUtil.extractIdEntreprise(jwt);
         }
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -50,6 +51,7 @@ public class ApplicationRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+        MDC.put("idEntreprise", idEntreprise);
         chain.doFilter(request, response);
     }
 }
