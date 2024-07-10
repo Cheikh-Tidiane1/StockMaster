@@ -19,12 +19,17 @@ import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 //@RequestMapping(APP_ROOT + "/auth")
 public class AuthenticationController {
 
+    private final AuthenticationManager authenticationManager;
+    private final ApplicationUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
+
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private ApplicationUserDetailsService userDetailsService;
-    @Autowired
-    private JwtUtil jwtUtil;
+    public AuthenticationController(AuthenticationManager authenticationManager, ApplicationUserDetailsService userDetailsService, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
+
     @PostMapping(path = "authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -35,7 +40,7 @@ public class AuthenticationController {
         );
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getLogin());
-        final String jwt = jwtUtil.generateToken((ExtendedUser)userDetails);
+        final String jwt = jwtUtil.generateToken((ExtendedUser) userDetails);
         return ResponseEntity.ok(AuthenticationResponse.builder().accessToken(jwt).build());
     };
 }
