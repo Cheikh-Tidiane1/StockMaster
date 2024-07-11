@@ -20,7 +20,7 @@ public interface UtilisateurApi {
   @GetMapping(path = APP_ROOT + "/utilisateurs/all", produces = MediaType.APPLICATION_JSON_VALUE)
   Iterable<UtilisateurDto> findAll();
 
-  @DeleteMapping(path = APP_ROOT + "/fournisseur/delete/{idUtilisateur}")
+  @DeleteMapping(path = APP_ROOT + "/utilisateur/delete/{idUtilisateur}")
   void delete(@PathVariable("idUtilisateur") Integer id);
 
 }

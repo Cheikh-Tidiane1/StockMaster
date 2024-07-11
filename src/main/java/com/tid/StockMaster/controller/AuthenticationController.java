@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 
 @RestController
-//@RequestMapping(APP_ROOT + "/auth")
+@RequestMapping(APP_ROOT)
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -30,7 +30,7 @@ public class AuthenticationController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping(path = "authenticate")
+    @PostMapping(path = "/authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

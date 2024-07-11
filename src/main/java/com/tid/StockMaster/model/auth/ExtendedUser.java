@@ -20,7 +20,4 @@ public class ExtendedUser extends User {
         super(username, password, authorities);
         this.idEntreprise = idEntreprise;
     }
-
-
-
 }

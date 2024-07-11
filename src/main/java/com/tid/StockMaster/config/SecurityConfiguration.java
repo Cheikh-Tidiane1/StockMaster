@@ -39,7 +39,7 @@ public class SecurityConfiguration  {
         http.addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("authenticate","entreprises/create",
+                        .requestMatchers("/authenticate/**","entreprises/create",
                                 "/v3/api-docs",
                                 "/swagger-resources",
                                 "/swagger-resources/**",
@@ -48,7 +48,8 @@ public class SecurityConfiguration  {
                                 "/swagger-ui.html",
                                 "/webjars/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui/**")
+                                "/swagger-ui/**",
+                        "/stockMaster/v1/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
