@@ -10,6 +10,8 @@ import com.tid.StockMaster.services.UtilisateurService;
 import com.tid.StockMaster.validator.UtilisateurValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,10 +19,11 @@ import org.springframework.stereotype.Service;
 public class UtilisateurServiceImpl implements UtilisateurService {
 
   private UtilisateurRepository utilisateurRepository;
-
+  private PasswordEncoder passwordEncoder;
   @Autowired
-  public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository) {
+  public UtilisateurServiceImpl(UtilisateurRepository utilisateurRepository, @Lazy PasswordEncoder passwordEncoder) {
     this.utilisateurRepository = utilisateurRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -31,6 +34,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
       throw new InvalidEntityException("L'utilisateur n'est pas valide", ErrorCodes.UTILISATEUR_NOT_VALID, errors);
     }
 
+    dto.setMoteDePasse(passwordEncoder.encode(dto.getMoteDePasse()));
     return UtilisateurDto.fromEntity(
         utilisateurRepository.save(
             UtilisateurDto.toEntity(dto)
