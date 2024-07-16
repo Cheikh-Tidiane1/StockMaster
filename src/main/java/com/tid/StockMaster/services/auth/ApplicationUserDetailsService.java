@@ -23,9 +23,10 @@ import java.util.List;
 public class ApplicationUserDetailsService implements UserDetailsService {
 
     private UtilisateurService utilisateurService;
+
     @Autowired
-    public ApplicationUserDetailsService(UtilisateurService utilisateurService) {
-       this.utilisateurService = utilisateurService;
+    public void setUtilisateurService(UtilisateurService utilisateurService) {
+        this.utilisateurService = utilisateurService;
     }
 
     @Override
