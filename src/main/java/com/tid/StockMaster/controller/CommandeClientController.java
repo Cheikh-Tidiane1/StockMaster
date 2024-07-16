@@ -1,6 +1,7 @@
 package com.tid.StockMaster.controller;
 import com.tid.StockMaster.controller.api.CommandeClientApi;
 import com.tid.StockMaster.dto.CommandeClientDto;
+import com.tid.StockMaster.model.EtatCommande;
 import com.tid.StockMaster.services.CommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,10 @@ public class CommandeClientController implements CommandeClientApi {
     public ResponseEntity delete(Integer id) {
         commandeClientService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<CommandeClientDto> updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
+        return ResponseEntity.ok(commandeClientService.updateEtatCommande(idCommande, etatCommande));
     }
 }

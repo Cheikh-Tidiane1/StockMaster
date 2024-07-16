@@ -1,14 +1,12 @@
 package com.tid.StockMaster.controller.api;
 import com.tid.StockMaster.dto.CommandeClientDto;
+import com.tid.StockMaster.model.EtatCommande;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
 import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 
 public interface CommandeClientApi {
@@ -50,5 +48,8 @@ public interface CommandeClientApi {
           @ApiResponse(responseCode = "200",description = "La commande Client  a été supprime")
   })
   ResponseEntity delete(@PathVariable("idCommandeClient") Integer id);
+
+  @PatchMapping(APP_ROOT + "/commandesclients/update/etat/{idCommande}/{etatCommande}")
+  ResponseEntity<CommandeClientDto> updateEtatCommande(@PathVariable("idCommande") Integer idCommande, @PathVariable("etatCommande") EtatCommande etatCommande);
 
 }
