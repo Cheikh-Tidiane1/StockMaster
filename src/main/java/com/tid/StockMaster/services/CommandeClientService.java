@@ -2,6 +2,8 @@ package com.tid.StockMaster.services;
 import com.tid.StockMaster.dto.CommandeClientDto;
 import com.tid.StockMaster.model.EtatCommande;
 
+import java.math.BigDecimal;
+
 public interface CommandeClientService {
     CommandeClientDto save (CommandeClientDto commandeClientDto);
     CommandeClientDto findById(Integer id);
@@ -9,4 +11,6 @@ public interface CommandeClientService {
     Iterable<CommandeClientDto> findAll();
     void deleteById(Integer id);
     CommandeClientDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
+    CommandeClientDto updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantite);
+
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+
 @RestController
 public class CommandeClientController implements CommandeClientApi {
 
@@ -46,5 +48,10 @@ public class CommandeClientController implements CommandeClientApi {
     @Override
     public ResponseEntity<CommandeClientDto> updateEtatCommande(Integer idCommande, EtatCommande etatCommande) {
         return ResponseEntity.ok(commandeClientService.updateEtatCommande(idCommande, etatCommande));
+    }
+
+    @Override
+    public ResponseEntity<CommandeClientDto> updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantite) {
+        return ResponseEntity.ok(commandeClientService.updateQuantiteCommande(idCommande, idLigneCommande, quantite));
     }
 }
