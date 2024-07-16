@@ -1,4 +1,5 @@
 package com.tid.StockMaster.services.impl;
+import com.tid.StockMaster.dto.ClientDto;
 import com.tid.StockMaster.dto.CommandeClientDto;
 import com.tid.StockMaster.dto.LigneCommandeClientDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,5 +188,35 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         ligneCommandeClientRepository.save(ligneCommandeClient);
         return commandeClient;
 
+    }
+
+    @Override
+    public CommandeClientDto updateClient(Integer idCommande, Integer idClient) {
+        if(idCommande == null){
+            log.error("Commande client ID is NULL");
+            throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un Id null", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
+        }
+
+        if(idClient == null){
+            log.error("L'id client is NULL");
+            throw new InvalidOperationException("Impossible de modifier l'etat de la commande avec un Id Client null",
+                    ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
+        }
+
+        CommandeClientDto commandeClient = findById(idCommande);
+        if(commandeClient.isCommandeLivree()){
+            throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
+        }
+
+        Optional<Client> clientOptional = clientRepository.findById(idClient);
+        if (clientOptional.isEmpty()) {
+            throw new EntityNotFoundException(
+                    "Aucun client n'a ete trouve avec l'ID " + idClient, ErrorCodes.CLIENT_NOT_FOUND);
+        }
+
+        commandeClient.setClient(ClientDto.fromEntity(clientOptional.get()));
+        return CommandeClientDto.fromEntity(
+                commandeClientRepository.save(CommandeClientDto.toEntity(commandeClient))
+        );
     }
 }

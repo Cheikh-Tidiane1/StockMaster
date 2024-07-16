@@ -54,4 +54,9 @@ public class CommandeClientController implements CommandeClientApi {
     public ResponseEntity<CommandeClientDto> updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantite) {
         return ResponseEntity.ok(commandeClientService.updateQuantiteCommande(idCommande, idLigneCommande, quantite));
     }
+
+    @Override
+    public ResponseEntity<CommandeClientDto> updateClient(Integer idCommande, Integer idClient) {
+        return ResponseEntity.ok(commandeClientService.updateClient(idCommande, idClient));
+    }
 }
