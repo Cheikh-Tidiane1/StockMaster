@@ -1,4 +1,5 @@
 package com.tid.StockMaster.services.impl;
+import com.tid.StockMaster.dto.ArticleDto;
 import com.tid.StockMaster.dto.ClientDto;
 import com.tid.StockMaster.dto.CommandeClientDto;
 import com.tid.StockMaster.dto.LigneCommandeClientDto;
@@ -12,6 +13,7 @@ import com.tid.StockMaster.repository.ClientRepository;
 import com.tid.StockMaster.repository.CommandeClientRepository;
 import com.tid.StockMaster.repository.LigneCommandeClientRepository;
 import com.tid.StockMaster.services.CommandeClientService;
+import com.tid.StockMaster.validator.ArticleValidator;
 import com.tid.StockMaster.validator.CommandeClientValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,13 +203,27 @@ public class CommandeClientServiceImpl implements CommandeClientService {
     }
 
     @Override
-    public CommandeClientDto updateArticle(Integer idCommande, Integer idLigneCommande, Integer idOldArticle, Integer idNewArticle) {
+    public CommandeClientDto updateArticle(Integer idCommande, Integer idLigneCommande, Integer idArticle) {
         checkIdCommande(idCommande);
         checkIdLigneDeCommande(idLigneCommande);
-        checkIdArticle(idOldArticle,"ancien");
-        checkIdArticle(idNewArticle,"nouveau");
-        checkEtaCommande(idCommande);
-        return null ;
+        checkIdArticle(idArticle,"nouveau");
+        CommandeClientDto commandeClient = checkEtaCommande(idCommande);
+        Optional<LigneCommandeClient> ligneCommandeClient = findLigneCommandeClient(idLigneCommande);
+        Optional<Article> articleOptional = articleRepository.findById(idArticle);
+        if(articleOptional.isEmpty()){
+            throw new EntityNotFoundException(
+                    "Aucun article n'a ete trouve avec l'ID " + idArticle, ErrorCodes.ARTICLE_NOT_FOUND);
+        }
+        List<String> errors = ArticleValidator.validate(ArticleDto.fromEntity(articleOptional.get()));
+        if (!errors.isEmpty()) {
+            throw new InvalidEntityException("Article invalid", ErrorCodes.ARTICLE_NOT_VALID, errors);
+        }
+
+        LigneCommandeClient ligneCommandeClientToSaved = ligneCommandeClient.get();
+        ligneCommandeClientToSaved.setArticle(articleOptional.get());
+        ligneCommandeClientRepository.save(ligneCommandeClientToSaved);
+
+        return commandeClient;
     }
 
     private void checkIdCommande(Integer idCommande) {
@@ -239,6 +255,15 @@ public class CommandeClientServiceImpl implements CommandeClientService {
             throw new InvalidOperationException("Impossible de modifier la commande lorsqu'elle est livree", ErrorCodes.COMMANDE_CLIENT_NON_MODIFIABLE);
         }
         return commandeClient;
+    }
+
+    private Optional<LigneCommandeClient> findLigneCommandeClient(Integer idLigneCommande) {
+        Optional<LigneCommandeClient> ligneCommandeClientOptional = ligneCommandeClientRepository.findById(idLigneCommande);
+        if (ligneCommandeClientOptional.isEmpty()) {
+            throw new EntityNotFoundException(
+                    "Aucune ligne commande client n'a ete trouve avec l'ID " + idLigneCommande, ErrorCodes.COMMANDE_CLIENT_NOT_FOUND);
+        }
+        return ligneCommandeClientOptional;
     }
 
 

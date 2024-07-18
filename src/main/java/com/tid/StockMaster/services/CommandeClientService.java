@@ -13,7 +13,7 @@ public interface CommandeClientService {
     CommandeClientDto updateEtatCommande(Integer idCommande, EtatCommande etatCommande);
     CommandeClientDto updateQuantiteCommande(Integer idCommande, Integer idLigneCommande, BigDecimal quantite);
     CommandeClientDto updateClient(Integer idCommande, Integer idClient);
-    CommandeClientDto updateArticle(Integer idCommande,Integer idLigneCommande, Integer idOldArticle, Integer idNewArticle);
+    CommandeClientDto updateArticle(Integer idCommande,Integer idLigneCommande, Integer idArticle);
 
 
 }
