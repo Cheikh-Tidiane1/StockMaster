@@ -226,6 +226,16 @@ public class CommandeClientServiceImpl implements CommandeClientService {
         return commandeClient;
     }
 
+    @Override
+    public CommandeClientDto deleteArticle(Integer idCommande, Integer idLigneCommande) {
+        checkIdCommande(idCommande);
+        checkIdLigneDeCommande(idLigneCommande);
+        CommandeClientDto commandeClient = checkEtaCommande(idCommande);
+        ligneCommandeClientRepository.deleteById(idLigneCommande);
+        return commandeClient;
+
+    }
+
     private void checkIdCommande(Integer idCommande) {
         if(idCommande == null){
             log.error("Commande client ID is NULL");
