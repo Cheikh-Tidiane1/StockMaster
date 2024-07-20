@@ -236,6 +236,14 @@ public class CommandeClientServiceImpl implements CommandeClientService {
 
     }
 
+    @Override
+    public List<LigneCommandeClientDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande) {
+        checkIdCommande(idCommande);
+        return ligneCommandeClientRepository.findAllByCommandeClientId(idCommande)
+                .stream().map(LigneCommandeClientDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
     private void checkIdCommande(Integer idCommande) {
         if(idCommande == null){
             log.error("Commande client ID is NULL");

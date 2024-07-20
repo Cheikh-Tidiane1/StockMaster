@@ -1,8 +1,10 @@
 package com.tid.StockMaster.services;
 import com.tid.StockMaster.dto.CommandeClientDto;
+import com.tid.StockMaster.dto.LigneCommandeClientDto;
 import com.tid.StockMaster.model.EtatCommande;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface CommandeClientService {
     CommandeClientDto save (CommandeClientDto commandeClientDto);
@@ -15,6 +17,7 @@ public interface CommandeClientService {
     CommandeClientDto updateClient(Integer idCommande, Integer idClient);
     CommandeClientDto updateArticle(Integer idCommande,Integer idLigneCommande, Integer idArticle);
     CommandeClientDto deleteArticle(Integer idCommande, Integer idLigneCommande);
+    List<LigneCommandeClientDto> findAllLignesCommandesClientByCommandeClientId(Integer idCommande);
 
 
 }

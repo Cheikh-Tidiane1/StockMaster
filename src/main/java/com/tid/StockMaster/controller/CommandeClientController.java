@@ -1,6 +1,7 @@
 package com.tid.StockMaster.controller;
 import com.tid.StockMaster.controller.api.CommandeClientApi;
 import com.tid.StockMaster.dto.CommandeClientDto;
+import com.tid.StockMaster.dto.LigneCommandeClientDto;
 import com.tid.StockMaster.model.EtatCommande;
 import com.tid.StockMaster.services.CommandeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 public class CommandeClientController implements CommandeClientApi {
@@ -70,5 +72,9 @@ public class CommandeClientController implements CommandeClientApi {
         return ResponseEntity.ok(commandeClientService.deleteArticle(idCommande, idLigneCommande));
     }
 
+    @Override
+    public ResponseEntity<List<LigneCommandeClientDto>> findAllLignesCommandesClientByCommandeClientId(Integer idCommande) {
+        return ResponseEntity.ok(commandeClientService.findAllLignesCommandesClientByCommandeClientId(idCommande));
+    }
 
 }

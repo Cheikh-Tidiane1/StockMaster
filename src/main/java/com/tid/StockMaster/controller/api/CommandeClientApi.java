@@ -1,5 +1,6 @@
 package com.tid.StockMaster.controller.api;
 import com.tid.StockMaster.dto.CommandeClientDto;
+import com.tid.StockMaster.dto.LigneCommandeClientDto;
 import com.tid.StockMaster.model.EtatCommande;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 
@@ -65,4 +67,7 @@ public interface CommandeClientApi {
 
   @DeleteMapping(APP_ROOT + "/commandesclients/delete/article/{idCommande}/{idLigneCommande}")
   ResponseEntity<CommandeClientDto> deleteArticle(@PathVariable("idCommande") Integer idCommande, @PathVariable("idLigneCommande") Integer idLigneCommande);
+
+  @GetMapping(APP_ROOT + "/commandesclients/lignesCommande/{idCommande}")
+  ResponseEntity<List<LigneCommandeClientDto>> findAllLignesCommandesClientByCommandeClientId(@PathVariable("idCommande") Integer idCommande);
 }
