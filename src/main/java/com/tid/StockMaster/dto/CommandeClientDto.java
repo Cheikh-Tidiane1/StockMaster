@@ -1,5 +1,6 @@
 package com.tid.StockMaster.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tid.StockMaster.model.CommandeClient;
 import com.tid.StockMaster.model.EtatCommande;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class CommandeClientDto {
 
     private Integer idEntreprise;
 
+    @JsonIgnore
     private List<LigneCommandeClientDto> ligneCommandeClients;
 
     public static CommandeClientDto fromEntity(CommandeClient commandeClient) {
