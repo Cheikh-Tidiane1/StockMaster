@@ -1,10 +1,16 @@
 package com.tid.StockMaster.services.impl;
 
 import com.tid.StockMaster.dto.ArticleDto;
+import com.tid.StockMaster.dto.LigneCommandeClientDto;
+import com.tid.StockMaster.dto.LigneCommandeFournisseurDto;
+import com.tid.StockMaster.dto.LigneVenteDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
 import com.tid.StockMaster.repository.ArticleRepository;
+import com.tid.StockMaster.repository.LigneCommandeClientRepository;
+import com.tid.StockMaster.repository.LigneCommandeFournisseurRepository;
+import com.tid.StockMaster.repository.LigneVenteRepository;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +24,18 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class ArticleServiceImpl implements ArticleService {
+
     private final ArticleRepository articleRepository;
+    private LigneVenteRepository ligneVenteRepository;
+    private LigneCommandeFournisseurRepository  ligneCommandeFournisseurRepository;
+    private LigneCommandeClientRepository ligneCommandeClientRepository;
+
     @Autowired
-    public ArticleServiceImpl(ArticleRepository articleRepository) {
+    public ArticleServiceImpl(ArticleRepository articleRepository,LigneVenteRepository ligneVenteRepository,LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository,LigneCommandeClientRepository ligneCommandeClientRepository) {
         this.articleRepository = articleRepository;
+        this.ligneVenteRepository = ligneVenteRepository;
+        this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
+        this.ligneCommandeClientRepository  = ligneCommandeClientRepository;
     }
     @Override
     public ArticleDto save(ArticleDto articleDto) {
@@ -67,6 +81,29 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findAll().stream()
                 .map(ArticleDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneVenteDto> findHistoriqueVentes(Integer idArticle) {
+        return ligneVenteRepository.findAllByArticleId(idArticle)
+                .stream()
+                .map(LigneVenteDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LigneCommandeClientDto> findHistoriaueCommandeClient(Integer idArticle) {
+        return List.of();
+    }
+
+    @Override
+    public List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle) {
+        return List.of();
+    }
+
+    @Override
+    public List<ArticleDto> findAllArticleByIdCategory(Integer idCategory) {
+        return List.of();
     }
 
     @Override
