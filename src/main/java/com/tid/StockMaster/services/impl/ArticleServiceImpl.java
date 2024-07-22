@@ -106,7 +106,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleDto> findAllArticleByIdCategory(Integer idCategory) {
-        return List.of();
+        return articleRepository.findAllByCategoryId(idCategory)
+                .stream().map(ArticleDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
