@@ -99,7 +99,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(Integer idArticle) {
-        return List.of();
+        return ligneCommandeFournisseurRepository.findAllByArticleId(idArticle)
+                .stream().map(LigneCommandeFournisseurDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
