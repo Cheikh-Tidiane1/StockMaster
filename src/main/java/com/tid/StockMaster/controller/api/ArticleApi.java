@@ -1,12 +1,16 @@
 package com.tid.StockMaster.controller.api;
-
 import com.tid.StockMaster.dto.ArticleDto;
+import com.tid.StockMaster.dto.LigneCommandeClientDto;
+import com.tid.StockMaster.dto.LigneCommandeFournisseurDto;
+import com.tid.StockMaster.dto.LigneVenteDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.tid.StockMaster.utils.Constants.APP_ROOT;
 
@@ -46,4 +50,16 @@ public interface ArticleApi {
             @ApiResponse(responseCode = "200",description = "L'article  a été supprimé")
     })
     ResponseEntity deleteById(@PathVariable("idArticle") Integer id);
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/vente/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneVenteDto> findHistoriqueVentes(@PathVariable("idArticle") Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/commandeclient/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneCommandeClientDto> findHistoriqueCommandeClient(@PathVariable("idArticle") Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/historique/commandefournisseur/{idArticle}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<LigneCommandeFournisseurDto> findHistoriqueCommandeFournisseur(@PathVariable("idArticle") Integer idArticle);
+
+    @GetMapping(value = APP_ROOT + "/articles/filter/category/{idCategory}", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<ArticleDto> findAllArticleByIdCategory(@PathVariable("idCategory") Integer idCategory);
 }
