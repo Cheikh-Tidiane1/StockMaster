@@ -7,6 +7,7 @@ import com.tid.StockMaster.model.Article;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.services.FlickrService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +20,7 @@ public class SaveArticlePhoto implements Strategy<ArticleDto> {
     private FlickrService flickrService;
     private ArticleService articleService;
 
+    @Autowired
     public SaveArticlePhoto(FlickrService flickrService, ArticleService articleService) {
         this.flickrService = flickrService;
         this.articleService = articleService;
