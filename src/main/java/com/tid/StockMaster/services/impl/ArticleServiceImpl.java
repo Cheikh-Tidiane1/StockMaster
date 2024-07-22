@@ -7,10 +7,7 @@ import com.tid.StockMaster.dto.LigneVenteDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
-import com.tid.StockMaster.repository.ArticleRepository;
-import com.tid.StockMaster.repository.LigneCommandeClientRepository;
-import com.tid.StockMaster.repository.LigneCommandeFournisseurRepository;
-import com.tid.StockMaster.repository.LigneVenteRepository;
+import com.tid.StockMaster.repository.*;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.validator.ArticleValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +23,18 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final CommandeClientRepository commandeClientRepository;
     private LigneVenteRepository ligneVenteRepository;
     private LigneCommandeFournisseurRepository  ligneCommandeFournisseurRepository;
     private LigneCommandeClientRepository ligneCommandeClientRepository;
 
     @Autowired
-    public ArticleServiceImpl(ArticleRepository articleRepository,LigneVenteRepository ligneVenteRepository,LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository,LigneCommandeClientRepository ligneCommandeClientRepository) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, LigneVenteRepository ligneVenteRepository, LigneCommandeFournisseurRepository ligneCommandeFournisseurRepository, LigneCommandeClientRepository ligneCommandeClientRepository, CommandeClientRepository commandeClientRepository) {
         this.articleRepository = articleRepository;
         this.ligneVenteRepository = ligneVenteRepository;
         this.ligneCommandeFournisseurRepository = ligneCommandeFournisseurRepository;
         this.ligneCommandeClientRepository  = ligneCommandeClientRepository;
+        this.commandeClientRepository = commandeClientRepository;
     }
     @Override
     public ArticleDto save(ArticleDto articleDto) {
@@ -92,8 +91,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<LigneCommandeClientDto> findHistoriaueCommandeClient(Integer idArticle) {
-        return List.of();
+    public List<LigneCommandeClientDto> findHistoriqueCommandeClient(Integer idArticle) {
+        return  ligneCommandeClientRepository.findAllByArticleId(idArticle)
+                .stream().map(LigneCommandeClientDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
