@@ -3,7 +3,6 @@ import com.flickr4java.flickr.FlickrException;
 import com.tid.StockMaster.dto.ArticleDto;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidOperationException;
-import com.tid.StockMaster.model.Article;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.services.FlickrService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 
-@Service
+@Service("articleStrategy")
 @Slf4j
 public class SaveArticlePhoto implements Strategy<ArticleDto> {
 

@@ -3,7 +3,6 @@ import com.flickr4java.flickr.FlickrException;
 import com.tid.StockMaster.dto.FournisseurDto;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidOperationException;
-import com.tid.StockMaster.model.Fournisseur;
 import com.tid.StockMaster.services.FlickrService;
 import com.tid.StockMaster.services.FournisseurService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 
-@Service
+@Service("FournisseurStrategy")
 @Slf4j
 public class SaveFournisseurPhoto implements Strategy<FournisseurDto> {
     private FlickrService flickrService;
