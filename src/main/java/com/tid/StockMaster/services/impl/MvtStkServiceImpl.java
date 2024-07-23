@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -38,7 +39,9 @@ public class MvtStkServiceImpl implements MvtStkService {
 
     @Override
     public List<MvtStkDto> mvtStkArticle(Integer idArticle) {
-        return List.of();
+       return mvtStkRepository.findById(idArticle).stream()
+                .map(MvtStkDto::fromEntity)
+               .collect(Collectors.toList());
     }
 
     @Override
