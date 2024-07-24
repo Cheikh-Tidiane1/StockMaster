@@ -2,9 +2,12 @@ package com.tid.StockMaster.services.impl;
 
 import com.tid.StockMaster.dto.ArticleDto;
 import com.tid.StockMaster.dto.MvtStkDto;
+import com.tid.StockMaster.exception.ErrorCodes;
+import com.tid.StockMaster.exception.InvalidEntityException;
 import com.tid.StockMaster.repository.MvtStkRepository;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.services.MvtStkService;
+import com.tid.StockMaster.validator.MvtStkValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +49,13 @@ public class MvtStkServiceImpl implements MvtStkService {
 
     @Override
     public MvtStkDto entreeStock(MvtStkDto dto) {
-        return null;
+        List<String> errors = MvtStkValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Article is not valid",dto);
+            throw new InvalidEntityException("Le mouvement de stock n'est pas valide", ErrorCodes.MVT_STK_NOT_VALID,errors);
+        }
+        dto.setQuantite(BigDecimal.valueOf(Math.abs(dto.getQuantite().doubleValue())));
+        return MvtStkDto.fromEntity(mvtStkRepository.save(MvtStkDto.toEntity(dto)));
     }
 
     @Override
