@@ -1,6 +1,4 @@
 package com.tid.StockMaster.services.impl;
-
-import com.tid.StockMaster.dto.ArticleDto;
 import com.tid.StockMaster.dto.MvtStkDto;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
