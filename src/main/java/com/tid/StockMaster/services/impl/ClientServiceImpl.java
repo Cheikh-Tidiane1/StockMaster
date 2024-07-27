@@ -8,7 +8,12 @@ import com.tid.StockMaster.dto.ClientDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
+import com.tid.StockMaster.exception.InvalidOperationException;
+import com.tid.StockMaster.model.CommandeClient;
+import com.tid.StockMaster.model.LigneCommandeClient;
 import com.tid.StockMaster.repository.ClientRepository;
+import com.tid.StockMaster.repository.CommandeClientRepository;
+import com.tid.StockMaster.repository.LigneCommandeClientRepository;
 import com.tid.StockMaster.services.ClientService;
 import com.tid.StockMaster.validator.ClientValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +24,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ClientServiceImpl implements ClientService {
 
+  private final LigneCommandeClientRepository ligneCommandeClientRepository;
+  private final CommandeClientRepository commandeClientRepository;
   private ClientRepository  clientRepository;
 
   @Autowired
-  public ClientServiceImpl(ClientRepository clientRepository) {
+  public ClientServiceImpl(ClientRepository clientRepository, LigneCommandeClientRepository ligneCommandeClientRepository, CommandeClientRepository commandeClientRepository) {
     this.clientRepository = clientRepository;
+    this.ligneCommandeClientRepository = ligneCommandeClientRepository;
+    this.commandeClientRepository = commandeClientRepository;
   }
 
   @Override
@@ -67,6 +76,10 @@ public class ClientServiceImpl implements ClientService {
     if (id == null) {
       log.error("Client ID is null");
       return;
+    }
+    List<CommandeClient> commandeClients = commandeClientRepository.findAllByClientId(id);
+    if(!commandeClients.isEmpty()){
+      throw new InvalidOperationException("Impossible de supprimer un client qui a deja des commande clients",ErrorCodes.CLIENT_ALREADY_IN_USE);
     }
     clientRepository.deleteById(id);
   }
