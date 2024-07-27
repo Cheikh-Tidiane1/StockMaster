@@ -1,6 +1,8 @@
 package com.tid.StockMaster.services.impl;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.tid.StockMaster.dto.ChangerMdpUserDto;
 import com.tid.StockMaster.dto.UtilisateurDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
@@ -80,6 +82,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     "Aucun utilisateur avec l'email = " + email + " n' ete trouve dans la BDD",
                     ErrorCodes.UTILISATEUR_NOT_FOUND)
             );
+  }
+
+  @Override
+  public UtilisateurDto changerMotDePasse(ChangerMdpUserDto dto) {
+    return null;
   }
 
 }
