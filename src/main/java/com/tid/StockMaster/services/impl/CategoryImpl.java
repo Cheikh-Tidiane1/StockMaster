@@ -4,6 +4,9 @@ import com.tid.StockMaster.dto.CategoryDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
+import com.tid.StockMaster.exception.InvalidOperationException;
+import com.tid.StockMaster.model.Article;
+import com.tid.StockMaster.repository.ArticleRepository;
 import com.tid.StockMaster.repository.CategoryRepository;
 import com.tid.StockMaster.services.CategoryService;
 import com.tid.StockMaster.validator.CategoryValidator;
@@ -19,8 +22,10 @@ import java.util.stream.Collectors;
 public class CategoryImpl implements CategoryService {
 
     private CategoryRepository categoryRepository;
-    public CategoryImpl(CategoryRepository categoryRepository) {
+    private ArticleRepository articleRepository;
+    public CategoryImpl(CategoryRepository categoryRepository, ArticleRepository articleRepository) {
         this.categoryRepository = categoryRepository;
+        this.articleRepository = articleRepository;
     }
 
     @Override
@@ -70,6 +75,11 @@ public class CategoryImpl implements CategoryService {
         if(id == null ){
             log.error("Category id is null");
             return;
+        }
+        List<Article> articles = articleRepository.findAllByCategoryId(id);
+        if (!articles.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer cette categorie qui est deja utilise",
+                    ErrorCodes.CATEGORY_ALREADY_IN_USE);
         }
         categoryRepository.deleteById(id);
     }

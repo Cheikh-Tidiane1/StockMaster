@@ -135,7 +135,6 @@ public class ArticleServiceImpl implements ArticleService {
         if(!ligneVentes.isEmpty()) {
             throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des ventes", ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
-
         articleRepository.deleteById(id);
     }
 }
