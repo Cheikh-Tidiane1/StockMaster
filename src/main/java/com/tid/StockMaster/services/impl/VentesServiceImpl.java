@@ -1,21 +1,23 @@
 package com.tid.StockMaster.services.impl;
 
+import com.tid.StockMaster.dto.ArticleDto;
 import com.tid.StockMaster.dto.LigneVenteDto;
+import com.tid.StockMaster.dto.MvtStkDto;
 import com.tid.StockMaster.dto.VentesDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
-import com.tid.StockMaster.model.Article;
-import com.tid.StockMaster.model.LigneVente;
-import com.tid.StockMaster.model.Ventes;
+import com.tid.StockMaster.model.*;
 import com.tid.StockMaster.repository.ArticleRepository;
 import com.tid.StockMaster.repository.LigneVenteRepository;
 import com.tid.StockMaster.repository.VentesRepository;
+import com.tid.StockMaster.services.MvtStkService;
 import com.tid.StockMaster.services.VentesService;
 import com.tid.StockMaster.validator.VentesValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,7 @@ public class VentesServiceImpl implements VentesService {
     private ArticleRepository articleRepository;
     private VentesRepository  ventesRepository;
     private LigneVenteRepository ligneVenteRepository;
+    private MvtStkService mvtStkService;
 
     public VentesServiceImpl(ArticleRepository articleRepository, VentesRepository ventesRepository, LigneVenteRepository ligneVenteRepository) {
         this.articleRepository = articleRepository;
@@ -64,6 +67,7 @@ public class VentesServiceImpl implements VentesService {
             LigneVente ligneVente = LigneVenteDto.toEntity(ligneVenteDto);
             ligneVente.setVente(savedVentes);
             ligneVenteRepository.save(ligneVente);
+            updateMvtStk(ligneVente);
         });
 
         return VentesDto.fromEntity(savedVentes);
@@ -107,5 +111,17 @@ public class VentesServiceImpl implements VentesService {
             return;
         }
         ventesRepository.deleteById(id);
+    }
+
+    public void updateMvtStk(LigneVente lig){
+            MvtStkDto mvtStkDto = MvtStkDto.builder()
+                    .article(ArticleDto.fromEntity(lig.getArticle()))
+                    .dateMvt(Instant.now())
+                    .typeMvt(TypeMvtStk.SORTIE)
+                    .sourceMvt(SourceMvtStk.VENTE)
+                    .quantite(lig.getQuantite())
+                    .idEntreprise(lig.getIdEntreprise())
+                    .build();
+            mvtStkService.sortieStock(mvtStkDto);
     }
 }
