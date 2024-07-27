@@ -79,7 +79,7 @@ public class ClientServiceImpl implements ClientService {
     }
     List<CommandeClient> commandeClients = commandeClientRepository.findAllByClientId(id);
     if(!commandeClients.isEmpty()){
-      throw new InvalidOperationException("Impossible de supprimer un client qui a deja des commande clients",ErrorCodes.CLIENT_ALREADY_IN_USE);
+      throw new InvalidOperationException("Impossible de supprimer un client qui a deja des commandes",ErrorCodes.CLIENT_ALREADY_IN_USE);
     }
     clientRepository.deleteById(id);
   }
