@@ -7,6 +7,10 @@ import com.tid.StockMaster.dto.LigneVenteDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
+import com.tid.StockMaster.exception.InvalidOperationException;
+import com.tid.StockMaster.model.LigneCommandeClient;
+import com.tid.StockMaster.model.LigneCommandeFournisseur;
+import com.tid.StockMaster.model.LigneVente;
 import com.tid.StockMaster.repository.*;
 import com.tid.StockMaster.services.ArticleService;
 import com.tid.StockMaster.validator.ArticleValidator;
@@ -116,6 +120,20 @@ public class ArticleServiceImpl implements ArticleService {
         if (id == null) {
             log.error("Article ID is null");
             return;
+        }
+        List<LigneCommandeClient> ligneCommandeClients = ligneCommandeClientRepository.findAllByArticleId(id);
+        if(!ligneCommandeClients.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des commandes client", ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+
+        List<LigneCommandeFournisseur> ligneCommandeFournisseurs = ligneCommandeFournisseurRepository.findAllByArticleId(id);
+        if(!ligneCommandeFournisseurs.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des commandes fournisseur", ErrorCodes.ARTICLE_ALREADY_IN_USE);
+        }
+
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByArticleId(id);
+        if(!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer un article deja utilise dans des ventes", ErrorCodes.ARTICLE_ALREADY_IN_USE);
         }
 
         articleRepository.deleteById(id);
