@@ -5,6 +5,9 @@ import com.tid.StockMaster.dto.FournisseurDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
+import com.tid.StockMaster.exception.InvalidOperationException;
+import com.tid.StockMaster.model.CommandeClient;
+import com.tid.StockMaster.repository.CommandeFournisseurRepository;
 import com.tid.StockMaster.repository.FournisseurRepository;
 import com.tid.StockMaster.services.FournisseurService;
 import com.tid.StockMaster.validator.FournisseurValidator;
@@ -18,10 +21,12 @@ import org.springframework.stereotype.Service;
 public class FournisseurServiceImpl implements FournisseurService {
 
   private FournisseurRepository fournisseurRepository;
+  private CommandeFournisseurRepository commandeFournisseurRepository;
 
   @Autowired
-  public FournisseurServiceImpl(FournisseurRepository fournisseurRepository) {
+  public FournisseurServiceImpl(FournisseurRepository fournisseurRepository, CommandeFournisseurRepository commandeFournisseurRepository) {
     this.fournisseurRepository = fournisseurRepository;
+    this.commandeFournisseurRepository  = commandeFournisseurRepository;
   }
 
   @Override
@@ -65,6 +70,11 @@ public class FournisseurServiceImpl implements FournisseurService {
     if (id == null) {
       log.error("Fournisseur ID is null");
       return;
+    }
+    List<CommandeClient> commandeFournisseur = commandeFournisseurRepository.findAllByFournisseurId(id);
+    if (!commandeFournisseur.isEmpty()) {
+      throw new InvalidOperationException("Impossible de supprimer un fournisseur qui a deja des commandes",
+              ErrorCodes.FOURNISSEUR_ALREADY_IN_USE);
     }
     fournisseurRepository.deleteById(id);
   }

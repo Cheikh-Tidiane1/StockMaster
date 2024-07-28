@@ -7,6 +7,7 @@ import com.tid.StockMaster.dto.VentesDto;
 import com.tid.StockMaster.exception.EntityNotFoundException;
 import com.tid.StockMaster.exception.ErrorCodes;
 import com.tid.StockMaster.exception.InvalidEntityException;
+import com.tid.StockMaster.exception.InvalidOperationException;
 import com.tid.StockMaster.model.*;
 import com.tid.StockMaster.repository.ArticleRepository;
 import com.tid.StockMaster.repository.LigneVenteRepository;
@@ -109,6 +110,11 @@ public class VentesServiceImpl implements VentesService {
         if (id == null) {
             log.error("Vente ID is NULL");
             return;
+        }
+        List<LigneVente> ligneVentes = ligneVenteRepository.findAllByVenteId(id);
+        if (!ligneVentes.isEmpty()) {
+            throw new InvalidOperationException("Impossible de supprimer une vente ...",
+                    ErrorCodes.VENTE_ALREADY_IN_USE);
         }
         ventesRepository.deleteById(id);
     }
